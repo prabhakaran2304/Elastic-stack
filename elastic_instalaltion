@@ -1,0 +1,140 @@
+Step 1: install Java 1.8 DJK.
+Install on all servers
+
+
+sudo yum install java-1.8.0-openjdk.x86_64
+1
+sudo yum install java-1.8.0-openjdk.x86_64
+set $JAVA_HOME to
+
+
+export JAVA_HOME=/usr/lib/jvm
+1
+export JAVA_HOME=/usr/lib/jvm
+you may run “java -version” to confirm your version of java installed.
+
+
+java -version
+1
+java -version
+Step 2: Import Elasticsearch PGP key
+
+
+rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+1
+rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+Step 3: Setup Repositories for Elasticsearch(4) , Kibana(1) , and Logstash(1)  (number represents the amount of servers you should setup the Repositories on). 
+
+For Elasticsearch:
+Server names: (analyze, elastic1,elastic2,elastic3)
+Navigate to /etc/yum.repos.d and create a new repository file, call it elasticsearch.repo
+
+
+nano/etc/yum.repos.d/
+1
+nano/etc/yum.repos.d/
+And copy the following to it:
+
+
+[elasticsearch-5.x]
+name=Elasticsearch repository for 5.x packages
+baseurl=https://artifacts.elastic.co/packages/5.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+1
+2
+3
+4
+5
+6
+7
+8
+[elasticsearch-5.x]
+name=Elasticsearch repository for 5.x packages
+baseurl=https://artifacts.elastic.co/packages/5.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+CTRL-O and save as elasticsearch.repo”
+
+Do the same for your Kibana Server
+Server name: (analyze)
+
+
+nano/etc/yum.repos.d/
+1
+nano/etc/yum.repos.d/
+
+[kibana-5.x]
+name=Kibana repository for 5.x packages
+baseurl=https://artifacts.elastic.co/packages/5.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+1
+2
+3
+4
+5
+6
+7
+8
+[kibana-5.x]
+name=Kibana repository for 5.x packages
+baseurl=https://artifacts.elastic.co/packages/5.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+Save as kibana.repo
+
+Lastly, on your logstash server setup a repo for Logstash
+Server name:(logstash)
+
+
+nano/etc/yum.repos.d/
+1
+nano/etc/yum.repos.d/
+
+[logstash-6.x]
+name=Elastic repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/5.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md
+
+save as logstash.repo
+
+Step 4: install Elasticsearch:
+server names: (analyze, elastic1,elastic2,elastic3)
+
+
+sudo yum install elasticsearch
+1
+sudo yum install elasticsearch
+Step 5: Set the service to start automatically
+
+To configure Elasticsearch to start automatically when the system boots up, run the following commands:
+
+
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+1
+2
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+Elasticsearch can be started and stopped as follows:
+sudo systemctl start elasticsearch.service
+sudo systemctl stop elasticsearch.service
+
+
