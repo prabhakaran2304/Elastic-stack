@@ -1,0 +1,24 @@
+input {
+  file {
+    path => "/home/sarcsv/*.csv"
+    start_position => "beginning"
+    type => "text"
+    sincedb_path => "/dev/null"
+  }
+}
+filter {
+  csv {
+      separator => " "
+      #autodetect_column_names => "true"
+     #column1 => ["Hostname_Sar"]
+      columns => ["Time","AMPM","CPU","%user","%nice","%system","%iowait","%steal","%idle"]
+      skip_empty_rows => "true"
+  }
+}
+output {
+   elasticsearch {
+     hosts => "http://10.61.2.129:9200"
+     index => "cpu_new_sar"
+  }
+stdout {codec => rubydebug}
+}
